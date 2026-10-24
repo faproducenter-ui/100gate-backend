@@ -1,0 +1,13 @@
+{
+  "name": "100gate-backend",
+  "version": "1.0.0",
+  "description": "Payment backend for 100 Gate Secrets",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2"
+  }
+}
