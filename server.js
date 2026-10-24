@@ -1,7 +1,6 @@
 const express = require('express');
 const app = express();
 
-// Разрешаем CORS вручную
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
@@ -17,13 +16,17 @@ app.use(express.json());
 const MerchantLogin = '100gate';
 
 app.post('/create-payment', (req, res) => {
-    const { amount, description } = req.body;
-    const OutSum = amount || 100;
-    const InvId = Date.now();
+    try {
+        const { amount, description } = req.body;
+        const OutSum = amount || 100;
+        const InvId = Date.now();
 
-    const paymentUrl = `https://auth.robokassa.ru/Merchant/Index.aspx?MerchantLogin=${MerchantLogin}&OutSum=${OutSum}&InvId=${InvId}&Description=${encodeURIComponent(description || 'Покупка монет')}&IsTest=1`;
+        const paymentUrl = `https://auth.robokassa.ru/Merchant/Index.aspx?MerchantLogin=${MerchantLogin}&OutSum=${OutSum}&InvId=${InvId}&Description=${encodeURIComponent(description || 'Покупка монет')}&IsTest=1`;
 
-    res.json({ paymentUrl });
+        res.json({ paymentUrl });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 });
 
 app.get('/', (req, res) => {
