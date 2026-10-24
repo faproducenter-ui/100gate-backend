@@ -33,4 +33,5 @@ app.get('/', (req, res) => {
     res.send('100Gate Payment Server is Active');
 });
 
+// Экспортируем приложение для Vercel (без app.listen)
 module.exports = app;
