@@ -1,23 +1,28 @@
 const express = require('express');
-const cors = require('cors');
-
 const app = express();
 
-// Разрешаем запросы со всех сайтов (CORS)
-app.use(cors());
+// Нативная настройка CORS (работает всегда без дополнительных библиотек)
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    if (req.method === 'OPTIONS') {
+        return res.sendStatus(200);
+    }
+    next();
+});
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Настройки Robokassa (укажите свои пароли при необходимости)
+// Настройки Robokassa
 const MerchantLogin = '100gate';
-const Pass1 = 'your_pass1'; // Пароль #1 из личного кабинета Robokassa
 
 app.post('/create-payment', (req, res) => {
     const { amount, description } = req.body;
     const OutSum = amount || 100;
-    const InvId = Date.now(); // Уникальный номер заказа
+    const InvId = Date.now();
 
-    // В тестовом режиме добавляем IsTest=1
     const paymentUrl = `https://auth.robokassa.ru/Merchant/Index.aspx?MerchantLogin=${MerchantLogin}&OutSum=${OutSum}&InvId=${InvId}&Description=${encodeURIComponent(description || 'Покупка монет')}&IsTest=1`;
 
     res.json({ paymentUrl });
