@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 
-// Нативная настройка CORS (работает всегда без дополнительных библиотек)
+// Разрешаем CORS вручную
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
@@ -13,9 +13,7 @@ app.use((req, res, next) => {
 });
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
-// Настройки Robokassa
 const MerchantLogin = '100gate';
 
 app.post('/create-payment', (req, res) => {
@@ -29,12 +27,7 @@ app.post('/create-payment', (req, res) => {
 });
 
 app.get('/', (req, res) => {
-    res.send('Server is running');
-});
-
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+    res.send('100Gate Payment Server is Active');
 });
 
 module.exports = app;
